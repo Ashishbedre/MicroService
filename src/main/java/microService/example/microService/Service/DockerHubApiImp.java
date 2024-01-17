@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import microService.example.microService.Entity.Image;
 import microService.example.microService.Interface.DockerHubApi;
+import microService.example.microService.Repository.ImageRepository;
 import microService.example.microService.config.AppConfig;
 import microService.example.microService.config.Config;
 import microService.example.microService.dto.*;
@@ -19,12 +20,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @EnableScheduling
 @Service
 public class DockerHubApiImp implements DockerHubApi {
 
-
+    @Autowired
+    private ImageRepository imageRepository;
+    @Autowired
+    private  DockerRepositoryImp dockerRepositoryImp;
     @Autowired
     private AppConfig appConfig;
     @Autowired
@@ -106,18 +111,22 @@ public class DockerHubApiImp implements DockerHubApi {
         for (DockerRepository repositoryNameAndNamespace : find_all) {
             String dockerHubApiUrl = buildDockerHubApiUrl(repositoryNameAndNamespace.getNamespace(), repositoryNameAndNamespace.getName());
             List<DockerImageResult> apiResponse = fetchAndSaveTags(dockerHubApiUrl);
-            Image repositoryEntity = new Image();
-            List<String> tags = new ArrayList<>();
-            for (DockerImageResult repo : apiResponse) {
-                repositoryEntity.setRepo(repositoryNameAndNamespace.getName());
-                repositoryEntity.setTag(repo.getName());
-                responceFormates.add(repositoryEntity);
-            }
-//            repositoryEntity.setRepository(repositoryNameAndNamespace.getName());
-//            repositoryEntity.setTags(tags);
-//            responceFormates.add(repositoryEntity);
+            update(apiResponse,repositoryNameAndNamespace.getName());
         }
-        return responceFormates;
+        return dockerRepositoryImp.getAllRepository();
+    }
+
+    @Override
+    public void update(List<DockerImageResult> apiResponse,String repository){
+        for (DockerImageResult repo : apiResponse) {
+            Optional<Image> existingEntity = imageRepository.findByRepoAndTag(repository, repo.getName());
+            if (existingEntity.equals(null) || existingEntity.isEmpty()) {
+                Image newEntity = new Image();
+                newEntity.setRepo(repository);
+                newEntity.setTag(repo.getName());
+                imageRepository.save(newEntity);
+            }
+        }
     }
 
     @Override

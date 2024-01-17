@@ -13,6 +13,7 @@ public interface DockerHubApi {
     public List<DockerRepository> fetchAndSaveRepositories();
 
     public List<Image> getAllDockerRepository();
+    public void update(List<DockerImageResult> apiResponse,String repository);
     public  String buildDockerHubApiUrl(String namespace, String repository);
     public List<DockerImageResult> fetchAndSaveTags(String apiUrl);
     public String buildDockerHubApiUrl();

@@ -1,13 +1,12 @@
 package microService.example.microService.Service;
 
+import microService.example.microService.Entity.Image;
 import microService.example.microService.Interface.DockerHubApi;
 import microService.example.microService.Interface.DockerRepositoryTransfer;
+import microService.example.microService.Repository.ImageRepository;
 import microService.example.microService.config.AppConfig;
 import microService.example.microService.config.Config;
-import microService.example.microService.dto.DockerImageInfo;
-import microService.example.microService.dto.DockerImageResult;
-import microService.example.microService.dto.DockerRepository;
-import microService.example.microService.dto.ResponceFormate;
+import microService.example.microService.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -19,89 +18,55 @@ import java.util.List;
 
 @Service
 public class DockerRepositoryImp  implements DockerRepositoryTransfer {
-//
-//
-//    @Autowired
-//    private AppConfig appConfig;
-//    @Autowired
-//    private Config config;
-//    @Autowired
-//    private DockerHubApi dockerHubApi;
-//    @Value("${tag.api.url}")
-//    private String tagUrl;
-//
-//    @Override
-//    public List<ResponceFormate> getAllDockerRepository() {
-//        List<DockerRepository> find_all =dockerHubApi.fetchAndSaveRepositories();
-//        List<ResponceFormate> responceFormates = new ArrayList<>();
-//        for (DockerRepository repositoryNameAndNamespace : find_all) {
-//            String dockerHubApiUrl = buildDockerHubApiUrl(repositoryNameAndNamespace.getNamespace(), repositoryNameAndNamespace.getName());
-//            List<DockerImageResult> apiResponse = fetchAndSaveTags(dockerHubApiUrl);
-//            ResponceFormate repositoryEntity = new ResponceFormate();
-//            List<String> tags = new ArrayList<>();
-//            for (DockerImageResult repo : apiResponse) {
-//                tags.add(repo.getName());
-//            }
-//            repositoryEntity.setRepository(repositoryNameAndNamespace.getName());
-//            repositoryEntity.setTags(tags);
-//            responceFormates.add(repositoryEntity);
-//        }
-//        return responceFormates;
-//    }
-//
-//    @Override
-//    public String buildDockerHubApiUrl(String namespace, String repository) {
-//        return tagUrl + namespace + "/repositories/" + repository + "/tags";
-//    }
-//
-//    @Override
-//    public List<DockerImageResult> fetchAndSaveTags(String apiUrl) {
-//        WebClient webClient = WebClient.create();
-//        String authorizationHeader = "Bearer " + appConfig.getGlobalVariable();
-//        DockerImageInfo response = webClient.get()
-//                .uri(apiUrl)
-//                .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
-//                .retrieve()
-//                .bodyToMono(DockerImageInfo.class)
-//                .block();
-//        List<DockerImageResult> repositories = response.getResults();
-//        if(repositories==null){
-//            return new ArrayList<>();
-//        }
-//        return repositories;
-//
-//
-//    }
-//
-//    @Override
-//    public List<String> filterTheRepository(String repository) {
-//        List<String> repositoryDetail = new ArrayList<>();
-//        List<ResponceFormate> getDetail = getAllDockerRepository();
-//        try{
-//            for(ResponceFormate detail : getDetail) {
-//                if (detail.getRepository().equals(repository)) {
-//                    for (String tag : detail.getTags()) {
-//                        repositoryDetail.add(tag);
-//                    }
-//                }
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        return  repositoryDetail;
-//    }
-//
-//    @Override
-//    public boolean findTheTag(String repository, String tag) {
-//        List<String> tagList = filterTheRepository(repository);
-//        for(String tags : tagList){
-//            if(tags.equals(tag)){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+
+    @Autowired
+    ImageRepository imageRepository;
+    @Override
+    public List<Image> getAllRepository() {
+        return imageRepository.findAll();
+    }
+
+    @Override
+    public List<Image> getAboveVersion(String repo,String tag) {
+        Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
+        List<Image> allAbove = imageRepository.findImagesAboveIdByRepo(repo,aboveTag.getId());
+        return allAbove;
+    }
+
+    @Override
+    public List<Image> getBelowVersion(String repo,String tag) {
+        Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
+        List<Image> allAbove = imageRepository.findImagesBelowIdByRepo(repo,aboveTag.getId());
+        return allAbove;
+    }
+
+    @Override
+    public List<ImageTransfer> getIterationAbove(List<ImageDto> requestDTOList) {
+        List<ImageTransfer> iterationAbove = new ArrayList<>();
+        for(ImageDto ImageFetch:requestDTOList){
+        List<Image> images= getAboveVersion(ImageFetch.getRepo(),ImageFetch.getTag());
+        ImageTransfer image = new ImageTransfer();
+        List<String> get = new ArrayList<>();
+        String var = "";
+        for(Image it : images){
+            var=it.getRepo();
+            get.add(it.getTag());
+        }
+        image.setRepo(var);
+        image.setTag(get);
+        iterationAbove.add(image);
+        }
+        return iterationAbove;
+    }
+
+    @Override
+    public List<ImageTransfer> getIterationBelow(List<ImageDto> requestDTOList) {
+        for(ImageDto ImageFetch:requestDTOList){
+            List<Image> images= getBelowVersion(ImageFetch.getRepo(),ImageFetch.getTag());;
+        }
+        return null;
+    }
+
 
 
 }
