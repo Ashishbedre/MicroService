@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DockerRepositoryImp  implements DockerRepositoryTransfer {
@@ -40,32 +41,66 @@ public class DockerRepositoryImp  implements DockerRepositoryTransfer {
         return allAbove;
     }
 
-    @Override
-    public List<ImageTransfer> getIterationAbove(List<ImageDto> requestDTOList) {
-        List<ImageTransfer> iterationAbove = new ArrayList<>();
-        for(ImageDto ImageFetch:requestDTOList){
-        List<Image> images= getAboveVersion(ImageFetch.getRepo(),ImageFetch.getTag());
-        ImageTransfer image = new ImageTransfer();
-        List<String> get = new ArrayList<>();
-        String var = "";
-        for(Image it : images){
-            var=it.getRepo();
-            get.add(it.getTag());
-        }
-        image.setRepo(var);
-        image.setTag(get);
-        iterationAbove.add(image);
-        }
-        return iterationAbove;
-    }
 
     @Override
-    public List<ImageTransfer> getIterationBelow(List<ImageDto> requestDTOList) {
-        for(ImageDto ImageFetch:requestDTOList){
-            List<Image> images= getBelowVersion(ImageFetch.getRepo(),ImageFetch.getTag());;
-        }
-        return null;
+    public List<ImageTransfer> getIterationVersions(List<ImageDto> requestDTOList, String direction) {
+        return requestDTOList.stream()
+                .map(imageDto -> {
+                    List<Image> images;
+
+                    if ("above".equalsIgnoreCase(direction)) {
+                        images = getAboveVersion(imageDto.getRepo(), imageDto.getTag());
+                    } else if ("below".equalsIgnoreCase(direction)) {
+                        images = getBelowVersion(imageDto.getRepo(), imageDto.getTag());
+                    } else {
+                        throw new IllegalArgumentException("Invalid direction parameter");
+                    }
+
+                    ImageTransfer image = new ImageTransfer();
+                    image.setRepo(images.isEmpty() ? "" : images.get(0).getRepo());
+                    image.setTag(images.stream().map(Image::getTag).collect(Collectors.toList()));
+                    return image;
+                })
+                .collect(Collectors.toList());
     }
+
+//    @Override
+//    public List<ImageTransfer> getIterationAbove(List<ImageDto> requestDTOList) {
+//        List<ImageTransfer> iterationAbove = new ArrayList<>();
+//        for(ImageDto ImageFetch:requestDTOList){
+//        List<Image> images= getAboveVersion(ImageFetch.getRepo(),ImageFetch.getTag());
+//        ImageTransfer image = new ImageTransfer();
+//        List<String> get = new ArrayList<>();
+//        String var = "";
+//        for(Image it : images){
+//            var=it.getRepo();
+//            get.add(it.getTag());
+//        }
+//        image.setRepo(var);
+//        image.setTag(get);
+//        iterationAbove.add(image);
+//        }
+//        return iterationAbove;
+//    }
+//
+//    @Override
+//    public List<ImageTransfer> getIterationBelow(List<ImageDto> requestDTOList) {
+//        List<ImageTransfer> iterationAbove = new ArrayList<>();
+//        for(ImageDto ImageFetch:requestDTOList){
+//            List<Image> images= getBelowVersion(ImageFetch.getRepo(),ImageFetch.getTag());;
+//            ImageTransfer image = new ImageTransfer();
+//            List<String> get = new ArrayList<>();
+//            String var = "";
+//            for(Image it : images){
+//                var=it.getRepo();
+//                get.add(it.getTag());
+//            }
+//            image.setRepo(var);
+//            image.setTag(get);
+//            iterationAbove.add(image);
+//        }
+//        return iterationAbove;
+//    }
 
 
 

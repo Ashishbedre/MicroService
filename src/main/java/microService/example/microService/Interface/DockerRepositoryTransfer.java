@@ -14,10 +14,11 @@ public interface DockerRepositoryTransfer {
 
     public List<Image> getAboveVersion(String repo,String tag);
     public  List<Image> getBelowVersion(String repo,String tag);
+    public List<ImageTransfer> getIterationVersions(List<ImageDto> requestDTOList, String direction);
 
-    public  List<ImageTransfer> getIterationAbove(List<ImageDto> requestDTOList);
-
-    public  List<ImageTransfer> getIterationBelow(List<ImageDto> requestDTOList);
+//    public  List<ImageTransfer> getIterationAbove(List<ImageDto> requestDTOList);
+//
+//    public  List<ImageTransfer> getIterationBelow(List<ImageDto> requestDTOList);
 //
 //    public List<ResponceFormate> getAllDockerRepository();
 //    //    public List<ResponceFormate> formatTheEntity(List<RepositoryEntity> repositoryEntityReturn);
