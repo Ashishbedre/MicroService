@@ -105,9 +105,8 @@ public class DockerHubApiImp implements DockerHubApi {
 
 
     @Override
-    public List<Image> getAllDockerRepository() {
+    public List<getImagedto> getAllDockerRepository() {
         List<DockerRepository> find_all =fetchAndSaveRepositories();
-        List<Image> responceFormates = new ArrayList<>();
         for (DockerRepository repositoryNameAndNamespace : find_all) {
             String dockerHubApiUrl = buildDockerHubApiUrl(repositoryNameAndNamespace.getNamespace(), repositoryNameAndNamespace.getName());
             List<DockerImageResult> apiResponse = fetchAndSaveTags(dockerHubApiUrl);

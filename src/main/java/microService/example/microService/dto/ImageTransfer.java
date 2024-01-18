@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class ImageTransfer {
 
-    private  String repo ;
+    private  String product ;
 
-    private List<String> tag;
+    private List<Version> versions;
 }

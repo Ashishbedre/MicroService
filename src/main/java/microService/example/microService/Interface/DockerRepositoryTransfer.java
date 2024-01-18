@@ -1,16 +1,13 @@
 package microService.example.microService.Interface;
 
 import microService.example.microService.Entity.Image;
-import microService.example.microService.dto.DockerImageResult;
-import microService.example.microService.dto.ImageDto;
-import microService.example.microService.dto.ImageTransfer;
-import microService.example.microService.dto.ResponceFormate;
+import microService.example.microService.dto.*;
 
 import java.util.List;
 
 public interface DockerRepositoryTransfer {
 
-    public List<Image> getAllRepository();
+    public List<getImagedto> getAllRepository();
 
     public List<Image> getAboveVersion(String repo,String tag);
     public  List<Image> getBelowVersion(String repo,String tag);

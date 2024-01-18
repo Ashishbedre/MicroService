@@ -17,14 +17,14 @@ public class SiteManagement {
     @Autowired
     DockerRepositoryImp dockerRepositoryImp;
 
-    @PostMapping("/getUpgradeVersion")
+    @GetMapping("/getUpgradeVersion")
     public ResponseEntity<List<ImageTransfer>> aboveVersion(@RequestBody List<ImageDto> requestDTOList){
 //        List<ImageTransfer> images = dockerRepositoryImp.getIterationAbove(requestDTOList);
         List<ImageTransfer> images = dockerRepositoryImp.getIterationVersions(requestDTOList,"above");
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
-    @PostMapping("/getDowngradeVersion")
+    @GetMapping("/getDowngradeVersion")
     public  ResponseEntity<List<ImageTransfer>> belowVersion(@RequestBody List<ImageDto> requestDTOList){
 //        List<ImageTransfer> images = dockerRepositoryImp.getIterationBelow(requestDTOList);
         List<ImageTransfer> images = dockerRepositoryImp.getIterationVersions(requestDTOList,"below");

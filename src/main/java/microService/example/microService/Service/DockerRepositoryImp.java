@@ -23,21 +23,43 @@ public class DockerRepositoryImp  implements DockerRepositoryTransfer {
     @Autowired
     ImageRepository imageRepository;
     @Override
-    public List<Image> getAllRepository() {
-        return imageRepository.findAll();
+    public List<getImagedto> getAllRepository() {
+        List<Image> getImage = imageRepository.findAll();
+        List<getImagedto> transfer = new ArrayList<>();
+        if(getImage!=null && !getImage.isEmpty()){
+            for(Image dto : getImage){
+                getImagedto Image = new getImagedto();
+                Image.setId(dto.getId());
+                Image.setProduct(dto.getRepo());
+                Image.setVersion(dto.getTag());
+                transfer.add(Image);
+            }
+        }
+        return transfer;
+
     }
 
     @Override
     public List<Image> getAboveVersion(String repo,String tag) {
         Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
-        List<Image> allAbove = imageRepository.findImagesAboveIdByRepo(repo,aboveTag.getId());
+        List<Image> allAbove = new ArrayList<>();
+        try {
+            allAbove = imageRepository.findImagesAboveIdByRepo(repo,aboveTag.getId());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return allAbove;
     }
 
     @Override
     public List<Image> getBelowVersion(String repo,String tag) {
         Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
-        List<Image> allAbove = imageRepository.findImagesBelowIdByRepo(repo,aboveTag.getId());
+        List<Image> allAbove = new ArrayList<>();
+        try {
+            allAbove = imageRepository.findImagesBelowIdByRepo(repo, aboveTag.getId());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return allAbove;
     }
 
@@ -57,8 +79,8 @@ public class DockerRepositoryImp  implements DockerRepositoryTransfer {
                     }
 
                     ImageTransfer image = new ImageTransfer();
-                    image.setRepo(images.isEmpty() ? "" : images.get(0).getRepo());
-                    image.setTag(images.stream().map(Image::getTag).collect(Collectors.toList()));
+                    image.setProduct(images.isEmpty() ? "" : images.get(0).getRepo());
+                    image.setVersions(images.stream().map(it -> new Version(it.getTag())).collect(Collectors.toList()));
                     return image;
                 })
                 .collect(Collectors.toList());
