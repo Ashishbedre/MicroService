@@ -2,6 +2,7 @@ package microService.example.microService.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import microService.example.microService.Entity.Image;
 import microService.example.microService.Interface.DockerHubApi;
 import microService.example.microService.Repository.ImageRepository;
@@ -105,8 +106,10 @@ public class DockerHubApiImp implements DockerHubApi {
 
 
     @Override
+    @Transactional
     public List<getImagedto> getAllDockerRepository() {
         List<DockerRepository> find_all =fetchAndSaveRepositories();
+        imageRepository.deleteAllAndResetAutoIncrement();
         for (DockerRepository repositoryNameAndNamespace : find_all) {
             String dockerHubApiUrl = buildDockerHubApiUrl(repositoryNameAndNamespace.getNamespace(), repositoryNameAndNamespace.getName());
             List<DockerImageResult> apiResponse = fetchAndSaveTags(dockerHubApiUrl);
@@ -117,15 +120,18 @@ public class DockerHubApiImp implements DockerHubApi {
 
     @Override
     public void update(List<DockerImageResult> apiResponse,String repository){
+        List<Image> imagesSave = new ArrayList<>();
         for (DockerImageResult repo : apiResponse) {
-            Optional<Image> existingEntity = imageRepository.findByRepoAndTag(repository, repo.getName());
-            if (existingEntity.equals(null) || existingEntity.isEmpty()) {
+//            Optional<Image> existingEntity = imageRepository.findByRepoAndTag(repository, repo.getName());
+//            if (existingEntity.equals(null) || existingEntity.isEmpty()) {
                 Image newEntity = new Image();
                 newEntity.setRepo(repository);
                 newEntity.setTag(repo.getName());
-                imageRepository.save(newEntity);
-            }
+                imagesSave.add(newEntity);
+//                imageRepository.save(newEntity);
+//            }
         }
+        imageRepository.saveAll(imagesSave);
     }
 
     @Override

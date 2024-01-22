@@ -1,7 +1,9 @@
 package microService.example.microService.Repository;
 
+import jakarta.transaction.Transactional;
 import microService.example.microService.Entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -9,6 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image,Long> {
+
+    @Transactional
+    @Modifying
+    @Query(value = "TRUNCATE TABLE Image", nativeQuery = true)
+    void deleteAllAndResetAutoIncrement();
     Optional<Image> findByRepoAndTag(String repo, String tag);
     @Query("SELECT i FROM Image i WHERE i.tag = :tagName AND i.repo = :repoName")
     Image findImageByTagAndRepo(@Param("repoName") String repoName,@Param("tagName") String tagName);
