@@ -1,8 +1,8 @@
 Endpoints1:
 	versionControl:
 		GET http://localhost:8081/v1/versionControl/checkForUpdate(save and get the data)
-	responce:
-		[
+	responce:[	
+ 
     {
         "id": 1,
         "product": "sdn-controller-mini",
@@ -34,8 +34,8 @@ ________________________________________________________________________________
 Endpoints2:
 	globalSDN:
 		POST http://localhost:8081/v1/globalSDN/SiteManagement/getUpgradeVersion
-	body:
-		[
+	body:[
+ 
   {
     "repo": "niralos-5g-core",
     "tag": "v-2.2.1"
@@ -50,6 +50,7 @@ Endpoints2:
     {
         "product": "niralos-5g-core",
         "versions": [
+	
             {
                 "version": "gnb_history_testing"
             },
@@ -92,6 +93,7 @@ ________________________________________________________________________________
     {
         "product": "niralos-5g-core",
         "versions": [
+	
             {
                 "version": "tls-testing"
             },
@@ -126,8 +128,8 @@ ________________________________________________________________________________
 Endpoints3:
 	Release_management:
 		GET http://localhost:8081/v1/Release_management/productList
-	responce:
-		[
+	responce:[
+ 
     "NiralOS 5g Core",
     "Niralos SDN Controller"
 ]
