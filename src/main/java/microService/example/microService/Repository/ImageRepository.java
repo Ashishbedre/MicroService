@@ -14,7 +14,7 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "TRUNCATE TABLE Image", nativeQuery = true)
+    @Query(value = "TRUNCATE TABLE image", nativeQuery = true)
     void deleteAllAndResetAutoIncrement();
     Optional<Image> findByRepoAndTag(String repo, String tag);
     @Query("SELECT i FROM Image i WHERE i.tag = :tagName AND i.repo = :repoName")
