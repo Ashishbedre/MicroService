@@ -7,5 +7,5 @@ public class ProductListDto {
     private String version;
     private String changeLog;
     private String knownFix;
-    private int download;
+    private int downloads;
 }

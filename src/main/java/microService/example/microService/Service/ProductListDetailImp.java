@@ -4,10 +4,14 @@ import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.ProductListDetail;
 import microService.example.microService.Repository.ProductListRepository;
 import microService.example.microService.dto.ProductListDto;
+import microService.example.microService.dto.ProductListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,8 +20,15 @@ public class ProductListDetailImp implements ProductListDetail {
     ProductListRepository productListRepository;
 
     @Override
-    public List<String> getProductList() {
-        return productListRepository.findDistinctProductNames();
+    public  List<ProductListResponse> getProductList() {
+        List<String> response = productListRepository.findDistinctProductNames();
+        List<ProductListResponse> responseSend= new ArrayList<>();
+        for(String iterate : response){
+            ProductListResponse assign = new ProductListResponse();
+            assign.setRepositoryName(iterate);
+            responseSend.add(assign);
+        }
+        return responseSend;
     }
 
     @Override
@@ -44,7 +55,7 @@ public class ProductListDetailImp implements ProductListDetail {
         dto.setVersion("V"+ String.valueOf(productList.getVersion()));
         dto.setChangeLog(productList.getChangeLog());
         dto.setKnownFix(productList.getKnowFix());
-        dto.setDownload(productList.getDownload());
+        dto.setDownloads(productList.getDownloads());
         return dto;
     }
 }

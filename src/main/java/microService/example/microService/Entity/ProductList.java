@@ -21,5 +21,5 @@ public class ProductList {
 
     private String knowFix;
 
-    private  int download;
+    private  int downloads;
 }
