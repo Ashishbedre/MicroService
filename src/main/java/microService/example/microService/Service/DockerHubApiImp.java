@@ -37,11 +37,11 @@ public class DockerHubApiImp implements DockerHubApi {
     private Config config;
     @Value("${login.api.url}")
     private String apiUrllogin;
-    @Value("${repo.api.url}")
-    private String repoUrl;
+    @Value("${repoTag.api.url}")
+    private String repoTagUrl;
 
-    @Value("${tag.api.url}")
-    private String tagUrl;
+//    @Value("${tag.api.url}")
+//    private String tagUrl;
 
 
 
@@ -154,12 +154,12 @@ public class DockerHubApiImp implements DockerHubApi {
     }
     @Override
     public String buildDockerHubApiUrl() {
-        return repoUrl+config.getUsername()+"/repositories";
+        return repoTagUrl+config.getUsername()+"/repositories";
     }
 
     @Override
     public String buildDockerHubApiUrl(String namespace, String repository) {
-        return tagUrl + namespace + "/repositories/" + repository + "/tags";
+        return repoTagUrl + namespace + "/repositories/" + repository + "/tags";
     }
 
 }

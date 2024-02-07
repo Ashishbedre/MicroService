@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 public class ProductList {
@@ -15,11 +17,11 @@ public class ProductList {
 
     private String product;
 
-    private int version ;
+    private float version ;
 
     private String changeLog;
 
     private String knowFix;
 
-    private  int downloads;
+    private LocalDateTime lastPull;
 }

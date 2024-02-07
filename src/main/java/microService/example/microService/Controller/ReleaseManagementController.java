@@ -2,8 +2,6 @@ package microService.example.microService.Controller;
 
 
 import microService.example.microService.Interface.ProductListDetail;
-import microService.example.microService.dto.ImageDto;
-import microService.example.microService.dto.ImageTransfer;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-//@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/Release_management")
 public class ReleaseManagementController {
 
@@ -32,7 +28,7 @@ public class ReleaseManagementController {
         List<ProductListDto> responce = productListDetail.getByProductNameAndVersion(productName);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
-    @DeleteMapping("/deleteReleaseVersion/{productName}/{version}")
+    @DeleteMapping("/deleteReleaseVersion/prodoctName={productName}/versionName={version}")
     public ResponseEntity<String> deleteReleaseVersion(@PathVariable String productName,@PathVariable int version){
         productListDetail.deleteReleaseVersion(productName,version);
         return new ResponseEntity<>("Done", HttpStatus.OK);

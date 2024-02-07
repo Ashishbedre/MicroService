@@ -2,10 +2,12 @@ package microService.example.microService.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ProductListDto {
-    private String version;
+    private float version;
     private String changeLog;
     private String knownFix;
-    private int downloads;
+    private LocalDateTime lastPull;
 }
