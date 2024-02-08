@@ -1,7 +1,7 @@
 package microService.example.microService.Controller;
 
 
-import microService.example.microService.Interface.ProductListDetail;
+import microService.example.microService.Interface.DockerReleaseManagement;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +16,21 @@ import java.util.List;
 public class ReleaseManagementController {
 
     @Autowired
-    private ProductListDetail productListDetail;
+    private DockerReleaseManagement dockerReleaseManagement;
     @GetMapping("/productListAndDownload")
     public ResponseEntity<List<ProductListResponse>> productListAndDownload(){
-        List<ProductListResponse> responce = productListDetail.getProductListAndDownload();
+        List<ProductListResponse> responce = dockerReleaseManagement.getProductListAndDownload();
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
 
     @GetMapping("/releaseVersionList/prodoctName={productName}")
     public ResponseEntity<List<ProductListDto>> releaseVersionList(@PathVariable String productName){
-        List<ProductListDto> responce = productListDetail.getByProductNameAndVersion(productName);
+        List<ProductListDto> responce = dockerReleaseManagement.getByProductNameAndVersion(productName);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
     @DeleteMapping("/deleteReleaseVersion/prodoctName={productName}/versionName={version}")
     public ResponseEntity<String> deleteReleaseVersion(@PathVariable String productName,@PathVariable String version){
-        productListDetail.deleteReleaseVersion(productName,version);
+        dockerReleaseManagement.deleteReleaseVersion(productName,version);
         return new ResponseEntity<>("Done", HttpStatus.OK);
     }
 

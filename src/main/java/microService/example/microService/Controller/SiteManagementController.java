@@ -1,6 +1,7 @@
 package microService.example.microService.Controller;
 
-import microService.example.microService.Service.DockerRepositoryImp;
+import microService.example.microService.Interface.DockerRepositoryTransfer;
+import microService.example.microService.Service.DockerRepositoryTransferImp;
 import microService.example.microService.dto.ImageDto;
 import microService.example.microService.dto.ImageTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +15,19 @@ import java.util.List;
 public class SiteManagementController {
 
     @Autowired
-    DockerRepositoryImp dockerRepositoryImp;
+    DockerRepositoryTransfer dockerRepositoryTransfer;
 
     @PostMapping("/getUpgradeVersion")
     public ResponseEntity<List<ImageTransfer>> aboveVersion(@RequestBody List<ImageDto> requestDTOList){
 //        List<ImageTransfer> images = dockerRepositoryImp.getIterationAbove(requestDTOList);
-        List<ImageTransfer> images = dockerRepositoryImp.getIterationVersions(requestDTOList,"above");
+        List<ImageTransfer> images = dockerRepositoryTransfer.getIterationVersions(requestDTOList,"above");
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
     @PostMapping("/getDowngradeVersion")
     public  ResponseEntity<List<ImageTransfer>> belowVersion(@RequestBody List<ImageDto> requestDTOList){
 //        List<ImageTransfer> images = dockerRepositoryImp.getIterationBelow(requestDTOList);
-        List<ImageTransfer> images = dockerRepositoryImp.getIterationVersions(requestDTOList,"below");
+        List<ImageTransfer> images = dockerRepositoryTransfer.getIterationVersions(requestDTOList,"below");
         return new ResponseEntity<>(images,HttpStatus.OK);
 
     }

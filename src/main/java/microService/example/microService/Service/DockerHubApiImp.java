@@ -21,7 +21,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @EnableScheduling
 @Service
@@ -30,7 +29,7 @@ public class DockerHubApiImp implements DockerHubApi {
     @Autowired
     private ImageRepository imageRepository;
     @Autowired
-    private  DockerRepositoryImp dockerRepositoryImp;
+    private DockerRepositoryTransferImp dockerRepositoryImp;
     @Autowired
     private AppConfig appConfig;
     @Autowired

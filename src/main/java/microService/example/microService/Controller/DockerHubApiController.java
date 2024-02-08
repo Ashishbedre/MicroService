@@ -1,9 +1,9 @@
 package microService.example.microService.Controller;
 
 
-import microService.example.microService.Entity.Image;
-import microService.example.microService.Service.DockerHubApiImp;
-import microService.example.microService.Service.DockerRepositoryImp;
+import microService.example.microService.Interface.DockerHubApi;
+import microService.example.microService.Interface.DockerRepositoryTransfer;
+import microService.example.microService.Service.DockerRepositoryTransferImp;
 import microService.example.microService.dto.getImagedto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,19 +16,19 @@ import java.util.List;
 @RequestMapping("/v1/versionControl")
 public class DockerHubApiController {
     @Autowired
-    DockerHubApiImp dockerHubApiImp;
+    DockerHubApi dockerHubApi;
     @Autowired
-    DockerRepositoryImp dockerRepositoryImp;
+    DockerRepositoryTransfer dockerRepositoryTransfer;
 
     @GetMapping("/checkForUpdate")
     public ResponseEntity<List<getImagedto>> saveAndFetchRepository(){
-        List<getImagedto> images = dockerHubApiImp.getAllDockerRepository();
+        List<getImagedto> images = dockerHubApi.getAllDockerRepository();
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
     @GetMapping("/getProductVersion")
     public  ResponseEntity<List<getImagedto>> FetchRepository(){
-        List<getImagedto> images= dockerRepositoryImp.getAllRepository();
+        List<getImagedto> images= dockerRepositoryTransfer.getAllRepository();
         return new ResponseEntity<>(images,HttpStatus.OK);
     }
 

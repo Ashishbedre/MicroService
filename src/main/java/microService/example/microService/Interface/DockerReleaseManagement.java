@@ -1,13 +1,11 @@
 package microService.example.microService.Interface;
 
-import microService.example.microService.Entity.ProductList;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
 
 import java.util.List;
-import java.util.Map;
 
-public interface ProductListDetail {
+public interface DockerReleaseManagement {
     public List<ProductListResponse> getProductListAndDownload();
     public  List<ProductListDto> getByProductNameAndVersion(String productName);
 

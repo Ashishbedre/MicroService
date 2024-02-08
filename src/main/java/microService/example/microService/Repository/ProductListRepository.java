@@ -2,7 +2,6 @@ package microService.example.microService.Repository;
 
 import jakarta.transaction.Transactional;
 import microService.example.microService.Entity.ProductList;
-import microService.example.microService.Interface.ProductListDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

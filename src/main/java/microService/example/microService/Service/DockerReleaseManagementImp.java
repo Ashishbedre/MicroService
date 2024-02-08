@@ -3,28 +3,22 @@ package microService.example.microService.Service;
 import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.DockerReleaseVersion;
 import microService.example.microService.Interface.DockerReleaseVersionHelper;
-import microService.example.microService.Interface.ProductListDetail;
+import microService.example.microService.Interface.DockerReleaseManagement;
 import microService.example.microService.Repository.ProductListRepository;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
-import microService.example.microService.dto.UpdateLastPulldto;
-import microService.example.microService.dto.pullCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
-public class ProductListDetailImp implements ProductListDetail {
+public class DockerReleaseManagementImp implements DockerReleaseManagement {
     @Autowired
     ProductListRepository productListRepository;
 

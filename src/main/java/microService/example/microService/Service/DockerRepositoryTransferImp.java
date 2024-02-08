@@ -1,24 +1,18 @@
 package microService.example.microService.Service;
 
 import microService.example.microService.Entity.Image;
-import microService.example.microService.Interface.DockerHubApi;
 import microService.example.microService.Interface.DockerRepositoryTransfer;
 import microService.example.microService.Repository.ImageRepository;
-import microService.example.microService.config.AppConfig;
-import microService.example.microService.config.Config;
 import microService.example.microService.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DockerRepositoryImp  implements DockerRepositoryTransfer {
+public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
 
     @Autowired
     ImageRepository imageRepository;
