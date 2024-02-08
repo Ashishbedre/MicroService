@@ -17,7 +17,7 @@ public class ProductList {
 
     private String product;
 
-    private float version ;
+    private String version ;
 
     private String changeLog;
 

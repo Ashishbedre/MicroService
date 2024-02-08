@@ -12,6 +12,9 @@ import java.util.List;
 
 public interface ProductListRepository  extends JpaRepository<ProductList,Long> {
 
+    @Query("SELECT p.version FROM ProductList p WHERE p.product = :productName")
+    List<String> findVersionsByProduct(String productName);
+
     @Query("SELECT p.product FROM ProductList p GROUP BY p.product")
     List<String> findDistinctProductNames();
 
@@ -20,5 +23,5 @@ public interface ProductListRepository  extends JpaRepository<ProductList,Long> 
     @Transactional
     @Modifying
     @Query("DELETE FROM ProductList p WHERE p.product = :productName AND p.version = :version")
-    void deleteByProductAndVersion(@Param("productName") String productName, @Param("version") int version);
+    void deleteByProductAndVersion(@Param("productName") String productName, @Param("version") String version);
 }

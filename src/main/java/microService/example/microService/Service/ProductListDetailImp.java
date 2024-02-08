@@ -1,13 +1,18 @@
 package microService.example.microService.Service;
 
 import microService.example.microService.Entity.ProductList;
+import microService.example.microService.Interface.DockerReleaseVersion;
+import microService.example.microService.Interface.DockerReleaseVersionHelper;
 import microService.example.microService.Interface.ProductListDetail;
 import microService.example.microService.Repository.ProductListRepository;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
+import microService.example.microService.dto.UpdateLastPulldto;
 import microService.example.microService.dto.pullCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -18,21 +23,27 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class ProductListDetailImp implements ProductListDetail {
     @Autowired
     ProductListRepository productListRepository;
 
+    @Autowired
+    DockerReleaseVersionHelper dockerReleaseVersionHelper;
+
+    @Autowired
+    DockerReleaseVersion dockerReleaseVersion;
     @Value("${pull.api.url}")
     private String pullApiUrl;
 
     @Override
-    public  List<ProductListResponse> getProductList() {
+    public  List<ProductListResponse> getProductListAndDownload() {
         List<String> response = productListRepository.findDistinctProductNames();
         List<ProductListResponse> responseSend= new ArrayList<>();
         for(String iterate : response){
             ProductListResponse assign = new ProductListResponse();
             assign.setRepositoryName(iterate);
-            assign.setDownloads(pullCount(iterate));
+            assign.setDownloads(dockerReleaseVersionHelper.pullCount(iterate));
             responseSend.add(assign);
         }
         return responseSend;
@@ -42,12 +53,11 @@ public class ProductListDetailImp implements ProductListDetail {
     public List<ProductListDto> getByProductNameAndVersion(String productName) {
         List<ProductList> response =  productListRepository.findByProduct(productName);
         List<ProductListDto> dtoList = convertToDtoList(response);
-
         return dtoList;
     }
 
     @Override
-    public void deleteReleaseVersion(String productName, int version) {
+    public void deleteReleaseVersion(String productName, String version) {
         productListRepository.deleteByProductAndVersion(productName,version);
     }
 
@@ -65,27 +75,6 @@ public class ProductListDetailImp implements ProductListDetail {
         dto.setKnownFix(productList.getKnowFix());
         dto.setLastPull(productList.getLastPull());
         return dto;
-    }
-
-    private int pullCount(String repositoriesName){
-        WebClient webClient = WebClient.create();
-
-        // Define the Docker API endpoint URL
-        String apiUrl = pullApiUrl+repositoriesName;
-        Integer pullCount=0;
-
-        // Retrieve the pull_count from the Docker API endpoint
-        try {
-             pullCount = webClient.get()
-                    .uri(apiUrl)
-                    .retrieve()
-                    .bodyToMono(pullCount.class)
-                    .block()
-                    .getPullCount();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return pullCount;
     }
 
 

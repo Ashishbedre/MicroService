@@ -20,18 +20,18 @@ public class ReleaseVersionController {
     DockerReleaseVersion dockerReleaseVersion;
     @GetMapping("/productList")
     public ResponseEntity<List<ProductNameResponce>> productName(){
-        List<ProductNameResponce> responce = dockerReleaseVersion.ProductList();
+        List<ProductNameResponce> responce = dockerReleaseVersion.productList();
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
-    @GetMapping("/availableVersion")
-    public ResponseEntity<List<ProductListReleaseVersion>> availableVersion(){
-        List<ProductListReleaseVersion> responce = dockerReleaseVersion.GetAvaliableVersion();
+    @GetMapping("/availableVersion/prodoctName={productName}")
+    public ResponseEntity<List<ProductListReleaseVersion>> availableVersion(@PathVariable String productName){
+        List<ProductListReleaseVersion> responce = dockerReleaseVersion.getAvaliableVersion(productName);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
 
     @PostMapping("/saveReleaseVersion")
     public ResponseEntity<Boolean> saveReleaseVersion(@RequestBody ProductListReleaseVersionSave productListReleaseVersionSave){
-        Boolean responce = dockerReleaseVersion.CreateRelease(productListReleaseVersionSave);
+        Boolean responce = dockerReleaseVersion.createRelease(productListReleaseVersionSave);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
 

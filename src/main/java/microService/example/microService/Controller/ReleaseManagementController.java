@@ -17,9 +17,9 @@ public class ReleaseManagementController {
 
     @Autowired
     private ProductListDetail productListDetail;
-    @GetMapping("/productList")
-    public ResponseEntity<List<ProductListResponse>> aboveVersion(){
-        List<ProductListResponse> responce = productListDetail.getProductList();
+    @GetMapping("/productListAndDownload")
+    public ResponseEntity<List<ProductListResponse>> productListAndDownload(){
+        List<ProductListResponse> responce = productListDetail.getProductListAndDownload();
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
 
@@ -29,7 +29,7 @@ public class ReleaseManagementController {
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
     @DeleteMapping("/deleteReleaseVersion/prodoctName={productName}/versionName={version}")
-    public ResponseEntity<String> deleteReleaseVersion(@PathVariable String productName,@PathVariable int version){
+    public ResponseEntity<String> deleteReleaseVersion(@PathVariable String productName,@PathVariable String version){
         productListDetail.deleteReleaseVersion(productName,version);
         return new ResponseEntity<>("Done", HttpStatus.OK);
     }
