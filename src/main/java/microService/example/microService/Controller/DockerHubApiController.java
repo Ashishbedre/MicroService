@@ -20,12 +20,14 @@ public class DockerHubApiController {
     @Autowired
     DockerRepositoryTransfer dockerRepositoryTransfer;
 
+//    Save the data in DB and return the data
     @GetMapping("/checkForUpdate")
     public ResponseEntity<List<getImagedto>> saveAndFetchRepository(){
         List<getImagedto> images = dockerHubApi.getAllDockerRepository();
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
+//    return the data
     @GetMapping("/getProductVersion")
     public  ResponseEntity<List<getImagedto>> FetchRepository(){
         List<getImagedto> images= dockerRepositoryTransfer.getAllRepository();

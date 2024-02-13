@@ -1,10 +1,8 @@
 package microService.example.microService.Entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
-@Data
 @Table(name = "Image")
 public class Image {
     @Id
@@ -14,4 +12,28 @@ public class Image {
     private  String repo ;
 
     private  String tag;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRepo() {
+        return repo;
+    }
+
+    public void setRepo(String repo) {
+        this.repo = repo;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }

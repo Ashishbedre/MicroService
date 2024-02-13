@@ -16,17 +16,15 @@ public class SiteManagementController {
 
     @Autowired
     DockerRepositoryTransfer dockerRepositoryTransfer;
-
+//    return the upgrade verrsion
     @PostMapping("/getUpgradeVersion")
     public ResponseEntity<List<ImageTransfer>> aboveVersion(@RequestBody List<ImageDto> requestDTOList){
-//        List<ImageTransfer> images = dockerRepositoryImp.getIterationAbove(requestDTOList);
         List<ImageTransfer> images = dockerRepositoryTransfer.getIterationVersions(requestDTOList,"above");
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
-
+//     return the Downgrade verrsion
     @PostMapping("/getDowngradeVersion")
     public  ResponseEntity<List<ImageTransfer>> belowVersion(@RequestBody List<ImageDto> requestDTOList){
-//        List<ImageTransfer> images = dockerRepositoryImp.getIterationBelow(requestDTOList);
         List<ImageTransfer> images = dockerRepositoryTransfer.getIterationVersions(requestDTOList,"below");
         return new ResponseEntity<>(images,HttpStatus.OK);
 

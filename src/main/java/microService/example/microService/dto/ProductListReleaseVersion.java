@@ -1,11 +1,27 @@
 package microService.example.microService.dto;
 
-import lombok.Data;
+
 
 import java.time.LocalDateTime;
 
-@Data
+
 public class ProductListReleaseVersion {
     private String version;
     private String pushedDate;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getPushedDate() {
+        return pushedDate;
+    }
+
+    public void setPushedDate(String pushedDate) {
+        this.pushedDate = pushedDate;
+    }
 }

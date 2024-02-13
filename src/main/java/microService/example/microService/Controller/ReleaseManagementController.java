@@ -17,17 +17,20 @@ public class ReleaseManagementController {
 
     @Autowired
     private DockerReleaseManagement dockerReleaseManagement;
+
+//    return the list of product list and Download that is already release
     @GetMapping("/productListAndDownload")
     public ResponseEntity<List<ProductListResponse>> productListAndDownload(){
         List<ProductListResponse> responce = dockerReleaseManagement.getProductListAndDownload();
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
-
+//    return the list of release version
     @GetMapping("/releaseVersionList/prodoctName={productName}")
     public ResponseEntity<List<ProductListDto>> releaseVersionList(@PathVariable String productName){
         List<ProductListDto> responce = dockerReleaseManagement.getByProductNameAndVersion(productName);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
+//    delete the version
     @DeleteMapping("/deleteReleaseVersion/prodoctName={productName}/versionName={version}")
     public ResponseEntity<String> deleteReleaseVersion(@PathVariable String productName,@PathVariable String version){
         dockerReleaseManagement.deleteReleaseVersion(productName,version);
