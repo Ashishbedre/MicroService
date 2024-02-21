@@ -2,6 +2,7 @@ package microService.example.microService.Repository;
 
 import jakarta.transaction.Transactional;
 import microService.example.microService.Entity.Image;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,7 +23,11 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
     @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id < :imageId ORDER BY i.id ASC")
     List<Image> findImagesAboveIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
+
+//    @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id > :imageId ORDER BY i.id ASC")
+//    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
     @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id > :imageId ORDER BY i.id ASC")
-    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
+    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId, Pageable pageable);
+
 
 }

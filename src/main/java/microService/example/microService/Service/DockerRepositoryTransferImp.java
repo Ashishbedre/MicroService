@@ -5,6 +5,8 @@ import microService.example.microService.Interface.DockerRepositoryTransfer;
 import microService.example.microService.Repository.ImageRepository;
 import microService.example.microService.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,7 +52,8 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
         Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
         List<Image> allAbove = new ArrayList<>();
         try {
-            allAbove = imageRepository.findImagesBelowIdByRepo(repo, aboveTag.getId());
+            Pageable pageable = PageRequest.of(0, 2);
+            allAbove = imageRepository.findImagesBelowIdByRepo(repo, aboveTag.getId(),pageable);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
