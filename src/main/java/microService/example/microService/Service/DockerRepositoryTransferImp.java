@@ -3,6 +3,7 @@ package microService.example.microService.Service;
 import microService.example.microService.Entity.Image;
 import microService.example.microService.Interface.DockerRepositoryTransfer;
 import microService.example.microService.Repository.ImageRepository;
+import microService.example.microService.Repository.ProductListRepository;
 import microService.example.microService.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,8 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
 
     @Autowired
     ImageRepository imageRepository;
+    @Autowired
+    ProductListRepository productListRepository;
     @Override
     public List<getImagedto> getAllRepository() {
         List<Image> getImage = imageRepository.findAll();
@@ -37,10 +40,18 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
 
     @Override
     public List<Image> getAboveVersion(String repo,String tag) {
-        Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
+        Long aboveTag = productListRepository.findIdByProductAndVersion(repo,tag);
         List<Image> allAbove = new ArrayList<>();
         try {
-            allAbove = imageRepository.findImagesAboveIdByRepo(repo,aboveTag.getId());
+            allAbove = productListRepository.findAllDataByProductAndIdLessThanOrderByidAsc(repo,aboveTag).stream()
+                    .map(productList -> {
+                        Image image = new Image();
+                        image.setId(productList.getId());
+                        image.setRepo(productList.getProduct());
+                        image.setTag(productList.getVersion());
+                        return image;
+                    })
+                    .collect(Collectors.toList());
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -49,11 +60,19 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
 
     @Override
     public List<Image> getBelowVersion(String repo,String tag) {
-        Image aboveTag = imageRepository.findImageByTagAndRepo(repo,tag);
+        Long aboveTag = productListRepository.findIdByProductAndVersion(repo,tag);
         List<Image> allAbove = new ArrayList<>();
         try {
             Pageable pageable = PageRequest.of(0, 2);
-            allAbove = imageRepository.findImagesBelowIdByRepo(repo, aboveTag.getId(),pageable);
+            allAbove = productListRepository.findAllDataByProductAndIdMoreThanOrderByidAsc(repo, aboveTag,pageable).stream()
+                    .map(productList -> {
+                        Image image = new Image();
+                        image.setId(productList.getId());
+                        image.setRepo(productList.getProduct());
+                        image.setTag(productList.getVersion());
+                        return image;
+                    })
+                    .collect(Collectors.toList());
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

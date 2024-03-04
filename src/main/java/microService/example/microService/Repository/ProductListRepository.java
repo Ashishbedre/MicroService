@@ -2,6 +2,7 @@ package microService.example.microService.Repository;
 
 import jakarta.transaction.Transactional;
 import microService.example.microService.Entity.ProductList;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,15 @@ public interface ProductListRepository  extends JpaRepository<ProductList,Long> 
     @Modifying
     @Query("DELETE FROM ProductList p WHERE p.product = :productName AND p.version = :version")
     void deleteByProductAndVersion(@Param("productName") String productName, @Param("version") String version);
+
+//    upgrade and downgrade
+    @Query("SELECT p.id FROM ProductList p WHERE p.product = :product AND p.version = :version")
+    Long findIdByProductAndVersion(@Param("product") String product, @Param("version") String version);
+
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id < :imageId ORDER BY p.id ASC")
+    List<ProductList> findAllDataByProductAndIdLessThanOrderByidAsc(String product, Long imageId);
+
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id > :imageId ORDER BY p.id ASC")
+    List<ProductList> findAllDataByProductAndIdMoreThanOrderByidAsc(String product, Long imageId, Pageable pageable);
+
 }

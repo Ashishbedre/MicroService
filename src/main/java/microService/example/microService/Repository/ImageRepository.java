@@ -18,16 +18,16 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
     @Query(value = "TRUNCATE TABLE image", nativeQuery = true)
     void deleteAllAndResetAutoIncrement();
     Optional<Image> findByRepoAndTag(String repo, String tag);
-    @Query("SELECT i FROM Image i WHERE i.tag = :tagName AND i.repo = :repoName")
-    Image findImageByTagAndRepo(@Param("repoName") String repoName,@Param("tagName") String tagName);
-
-    @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id < :imageId ORDER BY i.id ASC")
-    List<Image> findImagesAboveIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
-
+//    @Query("SELECT i FROM Image i WHERE i.tag = :tagName AND i.repo = :repoName")
+//    Image findImageByTagAndRepo(@Param("repoName") String repoName,@Param("tagName") String tagName);
+//
+//    @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id < :imageId ORDER BY i.id ASC")
+//    List<Image> findImagesAboveIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
+//
+////    @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id > :imageId ORDER BY i.id ASC")
+////    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
 //    @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id > :imageId ORDER BY i.id ASC")
-//    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId);
-    @Query("SELECT i FROM Image i WHERE i.repo = :repoName AND i.id > :imageId ORDER BY i.id ASC")
-    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId, Pageable pageable);
+//    List<Image> findImagesBelowIdByRepo(@Param("repoName") String repoName, @Param("imageId") Long imageId, Pageable pageable);
 
 
 }
