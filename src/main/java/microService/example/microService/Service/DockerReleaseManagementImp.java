@@ -5,6 +5,7 @@ import microService.example.microService.Interface.DockerReleaseVersion;
 import microService.example.microService.Interface.DockerReleaseVersionHelper;
 import microService.example.microService.Interface.DockerReleaseManagement;
 import microService.example.microService.Repository.ProductListRepository;
+import microService.example.microService.dto.PackageRealeseManagerdto;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,17 @@ public class DockerReleaseManagementImp implements DockerReleaseManagement {
     }
 
     @Override
-    public List<ProductList> getLatestProductVerions() {
-        return productListRepository.findLatestVersionsOfProducts();
+    public List<PackageRealeseManagerdto> getLatestProductVerions() {
+        List<ProductList> findLatestVerionOfProductsConvert = productListRepository.findLatestVersionsOfProducts();
+        List<PackageRealeseManagerdto> packageRealeseManagerdtos = new ArrayList<>();
+        for(ProductList convertdto : findLatestVerionOfProductsConvert){
+            PackageRealeseManagerdto packageRealeseManagerdto = new PackageRealeseManagerdto();
+            packageRealeseManagerdto.setId(convertdto.getId());
+            packageRealeseManagerdto.setProduct(convertdto.getProduct());
+            packageRealeseManagerdto.setVersion(convertdto.getVersion());
+            packageRealeseManagerdtos.add(packageRealeseManagerdto);
+        }
+        return packageRealeseManagerdtos;
     }
 
     private List<ProductListDto> convertToDtoList(List<ProductList> productList) {

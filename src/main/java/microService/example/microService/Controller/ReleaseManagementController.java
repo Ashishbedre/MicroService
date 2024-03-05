@@ -3,6 +3,7 @@ package microService.example.microService.Controller;
 
 import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.DockerReleaseManagement;
+import microService.example.microService.dto.PackageRealeseManagerdto;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,10 @@ public class ReleaseManagementController {
         dockerReleaseManagement.deleteReleaseVersion(productName,version);
         return new ResponseEntity<>("Done", HttpStatus.OK);
     }
-    //get latest version in productList
+
+    //get latest version in productList Dashboard
     @GetMapping("/getLatestVerion")
-    public  ResponseEntity<List<ProductList>> getLatestVerion(){
+    public  ResponseEntity<List<PackageRealeseManagerdto>> getLatestVerion(){
         return  new ResponseEntity<>(dockerReleaseManagement.getLatestProductVerions(),HttpStatus.OK);
     }
 

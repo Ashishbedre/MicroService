@@ -1,6 +1,7 @@
 package microService.example.microService.Interface;
 
 import microService.example.microService.Entity.ProductList;
+import microService.example.microService.dto.PackageRealeseManagerdto;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
 
@@ -12,6 +13,6 @@ public interface DockerReleaseManagement {
 
     public void deleteReleaseVersion(String productName,String version);
 //    public  String updateLastPull(ProductList productList);
-    public List<ProductList> getLatestProductVerions();
+    public List<PackageRealeseManagerdto> getLatestProductVerions();
 
 }
