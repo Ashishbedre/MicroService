@@ -1,6 +1,7 @@
 package microService.example.microService.Controller;
 
 
+import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.DockerReleaseManagement;
 import microService.example.microService.dto.ProductListDto;
 import microService.example.microService.dto.ProductListResponse;
@@ -35,6 +36,11 @@ public class ReleaseManagementController {
     public ResponseEntity<String> deleteReleaseVersion(@PathVariable String productName,@PathVariable String version){
         dockerReleaseManagement.deleteReleaseVersion(productName,version);
         return new ResponseEntity<>("Done", HttpStatus.OK);
+    }
+    //get latest version in productList
+    @GetMapping("/getLatestVerion")
+    public  ResponseEntity<List<ProductList>> getLatestVerion(){
+        return  new ResponseEntity<>(dockerReleaseManagement.getLatestProductVerions(),HttpStatus.OK);
     }
 
 

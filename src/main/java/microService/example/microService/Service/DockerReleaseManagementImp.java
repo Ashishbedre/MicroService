@@ -55,6 +55,11 @@ public class DockerReleaseManagementImp implements DockerReleaseManagement {
         productListRepository.deleteByProductAndVersion(productName,version);
     }
 
+    @Override
+    public List<ProductList> getLatestProductVerions() {
+        return productListRepository.findLatestVersionsOfProducts();
+    }
+
     private List<ProductListDto> convertToDtoList(List<ProductList> productList) {
         return productList.stream()
                 .map(this::convertToDto)

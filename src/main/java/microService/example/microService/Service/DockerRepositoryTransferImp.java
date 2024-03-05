@@ -95,7 +95,7 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
                     }
 
                     ImageTransfer image = new ImageTransfer();
-                    image.setProduct(images.isEmpty() ? "" : images.get(0).getRepo());
+                    image.setProduct(imageDto.getRepo());
                     image.setVersions(images.stream().map(it -> new Version(it.getTag())).collect(Collectors.toList()));
                     return image;
                 })
