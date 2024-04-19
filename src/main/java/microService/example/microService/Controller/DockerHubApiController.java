@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/versionControl")
+@CrossOrigin
 public class DockerHubApiController {
     @Autowired
     DockerHubApi dockerHubApi;

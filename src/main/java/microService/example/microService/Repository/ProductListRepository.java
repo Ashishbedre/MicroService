@@ -29,10 +29,10 @@ public interface ProductListRepository  extends JpaRepository<ProductList,Long> 
     @Query("SELECT p.id FROM ProductList p WHERE p.product = :product AND p.version = :version")
     Long findIdByProductAndVersion(@Param("product") String product, @Param("version") String version);
 
-    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id < :imageId ORDER BY p.id ASC")
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id > :imageId ORDER BY p.id ASC")
     List<ProductList> findAllDataByProductAndIdLessThanOrderByidAsc(String product, Long imageId);
 
-    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id > :imageId ORDER BY p.id ASC")
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id < :imageId ORDER BY p.id ASC")
     List<ProductList> findAllDataByProductAndIdMoreThanOrderByidAsc(String product, Long imageId, Pageable pageable);
 
 //    latest verion

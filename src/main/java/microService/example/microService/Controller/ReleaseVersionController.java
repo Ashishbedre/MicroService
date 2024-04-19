@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/Release_version")
+@CrossOrigin
 public class ReleaseVersionController {
 
     @Autowired
