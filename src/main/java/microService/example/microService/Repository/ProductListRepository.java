@@ -32,11 +32,18 @@ public interface ProductListRepository  extends JpaRepository<ProductList,Long> 
     @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id > :imageId ORDER BY p.id ASC")
     List<ProductList> findAllDataByProductAndIdLessThanOrderByidAsc(String product, Long imageId);
 
+    //Ashish change for getUpgradeVersion for tag is null
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id <= :imageId ORDER BY p.id desc")
+    List<ProductList> findAllDataByProductAndIdGreaterThanEqualOrderByidAsc(String product, Long imageId, Pageable pageable);
+
     @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id < :imageId ORDER BY p.id ASC")
     List<ProductList> findAllDataByProductAndIdMoreThanOrderByidAsc(String product, Long imageId, Pageable pageable);
 
 //    latest verion
     @Query("SELECT p FROM ProductList p WHERE p.id IN (SELECT MAX(p2.id) FROM ProductList p2 GROUP BY p2.product)")
     List<ProductList> findLatestVersionsOfProducts();
+
+    @Query("SELECT MAX(p.id) FROM ProductList p WHERE p.product = :repo")
+    Long findMaxIdByProduct(String repo);
 
 }

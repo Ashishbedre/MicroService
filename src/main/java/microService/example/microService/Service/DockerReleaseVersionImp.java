@@ -4,9 +4,11 @@ import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.DockerReleaseVersion;
 import microService.example.microService.Interface.DockerReleaseVersionHelper;
 import microService.example.microService.Repository.ProductListRepository;
+import microService.example.microService.config.AppConfig;
 import microService.example.microService.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -27,6 +29,9 @@ public class DockerReleaseVersionImp implements DockerReleaseVersion {
     @Value("${pull.api.url}")
     private String pullApiUrl;
 
+    @Autowired
+    private AppConfig appConfig;
+
 
     @Override
     public List<ProductNameResponce> productList() {
@@ -43,8 +48,10 @@ public class DockerReleaseVersionImp implements DockerReleaseVersion {
     @Override
     public List<ProductListReleaseVersion> getAvaliableVersion(String productName) {
         WebClient webClient = WebClient.create();
+        String authorizationHeader = "Bearer " + appConfig.getGlobalVariable();
         DockerRepositoryImageResponse response = webClient.get()
                 .uri(pullApiUrl+productName+"/tags/")
+                .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                 .retrieve()
                 .bodyToMono(DockerRepositoryImageResponse.class)
                 .block();

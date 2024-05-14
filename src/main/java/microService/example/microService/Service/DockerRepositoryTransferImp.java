@@ -1,6 +1,7 @@
 package microService.example.microService.Service;
 
 import microService.example.microService.Entity.Image;
+import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.DockerRepositoryTransfer;
 import microService.example.microService.Repository.ImageRepository;
 import microService.example.microService.Repository.ProductListRepository;
@@ -41,9 +42,19 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
     @Override
     public List<Image> getAboveVersion(String repo,String tag) {
         Long aboveTag = productListRepository.findIdByProductAndVersion(repo,tag);
+
         List<Image> allAbove = new ArrayList<>();
+        List<ProductList> productLists = new ArrayList<>();
+        //Ashish change for tag is null
+        if(tag==null) {
+            aboveTag = productListRepository.findMaxIdByProduct(repo);
+            Pageable pageable = PageRequest.of(0, 7);
+            productLists = productListRepository.findAllDataByProductAndIdGreaterThanEqualOrderByidAsc(repo, aboveTag, pageable);
+        }else {
+            productLists = productListRepository.findAllDataByProductAndIdLessThanOrderByidAsc(repo, aboveTag);
+        }
         try {
-            allAbove = productListRepository.findAllDataByProductAndIdLessThanOrderByidAsc(repo,aboveTag).stream()
+            allAbove = productLists.stream()
                     .map(productList -> {
                         Image image = new Image();
                         image.setId(productList.getId());
