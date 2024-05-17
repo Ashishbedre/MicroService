@@ -68,7 +68,7 @@ public class DockerHubApiImp implements DockerHubApi {
         return bearerToken;
     }
 
-    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
+    @Scheduled(fixedDelay = 15 * 60 * 1000)
     public String gettoken(){
         String token = login();
         appConfig.setGlobalVariable(token);
