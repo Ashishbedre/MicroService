@@ -3,10 +3,12 @@ package microService.example.microService.Service;
 import microService.example.microService.Entity.ProductList;
 import microService.example.microService.Interface.DockerReleaseVersionHelper;
 import microService.example.microService.Repository.ProductListRepository;
+import microService.example.microService.config.AppConfig;
 import microService.example.microService.dto.UpdateLastPulldto;
 import microService.example.microService.dto.pullCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +24,8 @@ public class DockerReleaseVersionHelperImp implements DockerReleaseVersionHelper
     ProductListRepository productListRepository;
     @Value("${pull.api.url}")
     private String pullApiUrl;
+    @Autowired
+    private AppConfig appConfig;
 
 
     @Override
@@ -68,8 +72,11 @@ public class DockerReleaseVersionHelperImp implements DockerReleaseVersionHelper
         UpdateLastPulldto response = new UpdateLastPulldto();
         try{
             WebClient webClient = WebClient.create();
+            //Ashish change for token
+            String authorizationHeader = "Bearer " + appConfig.getGlobalVariable();
             response = webClient.get()
                     .uri(apiUrl)
+                    .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                     .retrieve()
                     .bodyToMono(UpdateLastPulldto.class)
                     .block();
