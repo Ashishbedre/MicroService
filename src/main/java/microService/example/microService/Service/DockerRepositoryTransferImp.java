@@ -46,7 +46,7 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
         List<Image> allAbove = new ArrayList<>();
         List<ProductList> productLists = new ArrayList<>();
         //Ashish change for tag is null
-        if(tag==null) {
+        if(tag==null || tag.equals("null")) {
             aboveTag = productListRepository.findMaxIdByProduct(repo);
             Pageable pageable = PageRequest.of(0, 7);
             productLists = productListRepository.findAllDataByProductAndIdGreaterThanEqualOrderByidAsc(repo, aboveTag, pageable);
