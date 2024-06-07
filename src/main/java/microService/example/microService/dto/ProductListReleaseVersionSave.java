@@ -10,6 +10,9 @@ public class ProductListReleaseVersionSave {
     private String changeLog;
     private String knownFix;
 
+    private String compatible;
+
+
     public String getProductname() {
         return productname;
     }
@@ -40,5 +43,13 @@ public class ProductListReleaseVersionSave {
 
     public void setKnownFix(String knownFix) {
         this.knownFix = knownFix;
+    }
+
+    public String getCompatible() {
+        return compatible;
+    }
+
+    public void setCompatible(String compatible) {
+        this.compatible = compatible;
     }
 }

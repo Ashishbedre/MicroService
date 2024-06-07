@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 @Service
 @EnableScheduling
@@ -30,8 +31,15 @@ public class DockerReleaseVersionHelperImp implements DockerReleaseVersionHelper
 
     @Override
     public LocalDateTime dateTimeConverter(String inputDateTimeString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
-        return LocalDateTime.parse(inputDateTimeString, formatter);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+        DateTimeFormatter FORMATTER1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+        DateTimeFormatter FORMATTER2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSS'Z'");
+
+        try {
+            return LocalDateTime.parse(inputDateTimeString, FORMATTER1);
+        } catch (DateTimeParseException e) {
+            return LocalDateTime.parse(inputDateTimeString, FORMATTER2);
+        }
     }
 
     @Override

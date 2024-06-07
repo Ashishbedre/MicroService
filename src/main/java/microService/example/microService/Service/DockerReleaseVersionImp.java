@@ -50,7 +50,7 @@ public class DockerReleaseVersionImp implements DockerReleaseVersion {
         WebClient webClient = WebClient.create();
         String authorizationHeader = "Bearer " + appConfig.getGlobalVariable();
         DockerRepositoryImageResponse response = webClient.get()
-                .uri(pullApiUrl+productName+"/tags/")
+                .uri(pullApiUrl+productName+"/tags/?page=1&page_size=100")
                 .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                 .retrieve()
                 .bodyToMono(DockerRepositoryImageResponse.class)
@@ -74,6 +74,33 @@ public class DockerReleaseVersionImp implements DockerReleaseVersion {
     }
 
     @Override
+    public List<ProductListReleaseVersion> getCompatibleVersion(String productName) {
+        WebClient webClient = WebClient.create();
+        String authorizationHeader = "Bearer " + appConfig.getGlobalVariable();
+        DockerRepositoryImageResponse response = webClient.get()
+                .uri(pullApiUrl+productName+"/tags/?page=1&page_size=100")
+                .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
+                .retrieve()
+                .bodyToMono(DockerRepositoryImageResponse.class)
+                .block();
+
+        List<ProductListReleaseVersion> newProductList = new ArrayList<>();
+        int count =0;
+        for (DockerRepositoryImageResponse.Result result : response.getResults()) {
+            String name = result.getName();
+            System.out.println(count++);
+                DockerRepositoryImageResponse.Image[] lastPushed = result.getImages();
+                ProductListReleaseVersion productListReleaseVersion = new ProductListReleaseVersion();
+                productListReleaseVersion.setVersion(name);
+                productListReleaseVersion.setPushedDate(lastPushed[0].getLastPushed());
+                newProductList.add(productListReleaseVersion);
+
+        }
+
+        return newProductList;
+    }
+
+    @Override
     public boolean createRelease(ProductListReleaseVersionSave productListReleaseVersionSave) {
         ProductList createRelease = new ProductList();
         createRelease.setVersion(productListReleaseVersionSave.getProductVersion());
@@ -81,6 +108,7 @@ public class DockerReleaseVersionImp implements DockerReleaseVersion {
         createRelease.setChangeLog(productListReleaseVersionSave.getChangeLog());
         createRelease.setKnowFix(productListReleaseVersionSave.getKnownFix());
         createRelease.setLastPull(dockerReleaseVersionHelper.dateTimeConverter(dockerReleaseVersionHelper.updateLastPull(createRelease)));
+        createRelease.setCompatible(productListReleaseVersionSave.getCompatible());
         try{
             productListRepository.save(createRelease);
         }catch (Exception e){

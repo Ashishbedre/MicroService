@@ -32,6 +32,13 @@ public class ReleaseVersionController {
         List<ProductListReleaseVersion> responce = dockerReleaseVersion.getAvaliableVersion(productName);
         return new ResponseEntity<>(responce, HttpStatus.OK);
     }
+
+    //    return the version for compartible with available version
+    @GetMapping("/compatibleVersion/prodoctName={productName}")
+    public ResponseEntity<List<ProductListReleaseVersion>> compatibleVersion(@PathVariable String productName){
+        List<ProductListReleaseVersion> responce = dockerReleaseVersion.getCompatibleVersion(productName);
+        return new ResponseEntity<>(responce, HttpStatus.OK);
+    }
 //    save the data
     @PostMapping("/saveReleaseVersion")
     public ResponseEntity<Boolean> saveReleaseVersion(@RequestBody ProductListReleaseVersionSave productListReleaseVersionSave){

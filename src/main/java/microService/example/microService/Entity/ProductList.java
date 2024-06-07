@@ -23,6 +23,10 @@ public class ProductList {
 
     private LocalDateTime lastPull;
 
+    private String compatible;
+
+
+
     public Long getId() {
         return id;
     }
@@ -69,5 +73,13 @@ public class ProductList {
 
     public void setLastPull(LocalDateTime lastPull) {
         this.lastPull = lastPull;
+    }
+
+    public String getCompatible() {
+        return compatible;
+    }
+
+    public void setCompatible(String compatible) {
+        this.compatible = compatible;
     }
 }

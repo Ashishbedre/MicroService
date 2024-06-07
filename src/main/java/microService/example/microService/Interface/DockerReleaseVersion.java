@@ -9,6 +9,7 @@ public interface DockerReleaseVersion {
 
     List<ProductNameResponce> productList();
     List<ProductListReleaseVersion> getAvaliableVersion(String productName);
+    List<ProductListReleaseVersion> getCompatibleVersion(String productName);
 
     boolean createRelease(ProductListReleaseVersionSave productListReleaseVersionSave);
 
