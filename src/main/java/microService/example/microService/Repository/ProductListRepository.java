@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductListRepository  extends JpaRepository<ProductList,Long> {
 
@@ -45,5 +46,16 @@ public interface ProductListRepository  extends JpaRepository<ProductList,Long> 
 
     @Query("SELECT MAX(p.id) FROM ProductList p WHERE p.product = :repo")
     Long findMaxIdByProduct(String repo);
+
+    //Ashish add this two query for compatible
+    Optional<ProductList> findByProductAndVersion(String product, String version);
+
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.version = :version AND p.id > :id")
+    List<ProductList> findAllByProductAndVersionWithGreaterId(@Param("product") String product, @Param("version") String version, @Param("id") Long id);
+
+    @Query("SELECT p FROM ProductList p WHERE p.product = :product AND p.id >= :id")
+    List<ProductList> findAllByProductAndIdGreaterThanEqual(@Param("product") String product, @Param("id") Long id);
+
+    List<ProductList> findAllByProductAndId(String product, Long id);
 
 }
