@@ -122,8 +122,20 @@ public class DockerRepositoryTransferImp implements DockerRepositoryTransfer {
 
     @Override
     public CompatibilityCheckResultdto processProductVersions(List<VersionSetProductDto> versionSetProductDtos) {
-        if ((versionSetProductDtos.get(0).getProductSetVersion()==null && versionSetProductDtos.get(1).getProductSetVersion()==null) ||
-                (versionSetProductDtos.get(0).getProductSetVersion().equals("null") && versionSetProductDtos.get(1).getProductSetVersion().equals("null"))) {
+//        if(versionSetProductDtos.get(0).getProductSetVersion()==null && versionSetProductDtos.get(1).getProductSetVersion()==null){
+//            System.out.println("sd");
+//        }
+//        if(( versionSetProductDtos != null &&
+//                versionSetProductDtos.size() > 1 && versionSetProductDtos.get(0).getProductSetVersion().equals("null")
+//                && versionSetProductDtos.get(1).getProductSetVersion().equals("null"))){
+//            System.out.println("sd");
+//        }
+        if (versionSetProductDtos != null &&
+                versionSetProductDtos.size() > 1 &&
+                ((versionSetProductDtos.get(0).getProductSetVersion() == null ||
+                        versionSetProductDtos.get(0).getProductSetVersion().equals("null")) &&
+                        (versionSetProductDtos.get(1).getProductSetVersion() == null ||
+                                versionSetProductDtos.get(1).getProductSetVersion().equals("null")))){
             ArrayList<CompatibilityCheckResult> CompatibilityCheckResults = new ArrayList<>();
             CompatibilityCheckResults.add(new CompatibilityCheckResult(true, new ArrayList<>()));
             CompatibilityCheckResultdto compatibilityCheckResultdto = new CompatibilityCheckResultdto(CompatibilityCheckResults);

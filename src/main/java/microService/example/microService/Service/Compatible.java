@@ -8,6 +8,7 @@ import microService.example.microService.dto.VersionSetProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +66,19 @@ public class Compatible implements CompatibleImp {
                 ProductList product2Entity = productOpt2.get();
                 // Check if productversion1 exists with a greater id than productversion2
                 List<ProductList> productsWithGreaterId = productListRepository.findAllByProductAndId(productname2, product2Entity.getId());
+                if (!productsWithGreaterId.isEmpty()) {
+                    return new CompatibilityCheckResult(false, productsWithGreaterId);
+                }
+            } else if (productOpt2.isEmpty()) {
+                ProductList product = new ProductList();
+                product.setProduct(productname2);
+                product.setVersion(compatibleVersions1);
+                product.setChangeLog("Initial release");
+                product.setKnowFix("No known issues");
+                product.setLastPull(LocalDateTime.now());
+                product.setCompatible("Compatible");
+                List<ProductList> productsWithGreaterId = new ArrayList<>();
+                productsWithGreaterId.add(product);
                 if (!productsWithGreaterId.isEmpty()) {
                     return new CompatibilityCheckResult(false, productsWithGreaterId);
                 }
